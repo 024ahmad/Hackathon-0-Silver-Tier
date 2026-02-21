@@ -1,0 +1,28 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv/
+
+# Lock file (regenerated via `uv sync`)
+uv.lock
+
+# Runtime data — these folders contain user-dropped files,
+# processed tasks, and logs generated at runtime.
+# Only the README.md in each folder should be tracked.
+Inbox/*
+!Inbox/README.md
+
+Needs_Action/*
+!Needs_Action/README.md
+
+Done/*
+!Done/README.md
+
+Logs/*
+!Logs/README.md

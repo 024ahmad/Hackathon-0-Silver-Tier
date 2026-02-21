@@ -1,0 +1,8 @@
+Subject: Invoice Request
+From: Sharoz
+Date: 2026-02-19
+
+Please generate an invoice for the Q1 consulting services.
+Amount: $2,500
+Client: Acme Corp
+Due: 2026-03-01
