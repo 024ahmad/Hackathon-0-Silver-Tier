@@ -1,3 +1,6 @@
+# Environment variables — never commit real secrets
+.env
+
 # Python-generated files
 __pycache__/
 *.py[oc]
@@ -26,3 +29,9 @@ Done/*
 
 Logs/*
 !Logs/README.md
+
+Archive/*
+!Archive/README.md
+
+Pending_Approval/*
+!Pending_Approval/README.md

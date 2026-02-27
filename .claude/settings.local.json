@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find \"/mnt/e/Quarter_4_of_GIAIC/Hackathon Projects/Hackathon-0/AI_Employee_Vault/Silver\" -name \"*.env\" -o -name \".env\" 2>/dev/null | sort; ls -a \"/mnt/e/Quarter_4_of_GIAIC/Hackathon Projects/Hackathon-0/AI_Employee_Vault/Silver/\" | grep env)"
+    ]
+  }
+}

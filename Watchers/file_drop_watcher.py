@@ -25,6 +25,11 @@ from watchdog.observers.polling import PollingObserver
 WATCH_INTERVAL_MS = int(os.environ.get("WATCH_INTERVAL_MS", "250"))
 WATCH_INTERVAL_S = WATCH_INTERVAL_MS / 1000.0
 
+# Dry-run mode: when True, log what WOULD happen without writing any files.
+# Defaults to True so the watcher is safe to run in any environment by default.
+_dry_run_env = os.environ.get("DRY_RUN", "true").strip().lower()
+DRY_RUN = _dry_run_env not in ("false", "0", "no")
+
 IGNORED_SUFFIXES = {".tmp", ".swp", ".ds_store", ".crdownload", ".part"}
 IGNORED_NAMES = {".ds_store", "thumbs.db", "desktop.ini"}
 IGNORED_PREFIXES = ("~$",)
@@ -195,6 +200,20 @@ class InboxHandler(FileSystemEventHandler):
 
         logger.info("Detected new file: %s", filepath.name)
 
+        if DRY_RUN:
+            staged_name = f"FILE_{filepath.name}"
+            task_name = f"{staged_name}.md"
+            logger.info(
+                "[DRY-RUN] Would copy → Vault/Needs_Action/%s", staged_name
+            )
+            logger.info(
+                "[DRY-RUN] Would create task → Vault/Needs_Action/%s", task_name
+            )
+            logger.info("[DRY-RUN] Would append entry to System_Logs.md")
+            logger.info("[DRY-RUN] Would append record to Vault/Logs/YYYY-MM-DD.jsonl")
+            logger.info("[DRY-RUN] No files written. Set DRY_RUN=false to enable.")
+            return
+
         try:
             staged = copy_to_needs_action(filepath)
             task_md = create_task_markdown(filepath, staged)
@@ -226,6 +245,9 @@ def main():
     logger.info("  Staging  : %s", NEEDS_ACTION_DIR)
     logger.info("  Logs     : %s", LOGS_DIR)
     logger.info("  Interval : %dms", WATCH_INTERVAL_MS)
+    logger.info("  DRY_RUN  : %s", DRY_RUN)
+    if DRY_RUN:
+        logger.info("  *** DRY-RUN MODE: no files will be written ***")
     logger.info("=" * 55)
 
     observer = PollingObserver(timeout=WATCH_INTERVAL_S)

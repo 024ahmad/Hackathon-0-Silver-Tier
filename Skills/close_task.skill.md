@@ -14,6 +14,7 @@
 - `./Vault/Logs/YYYY-MM-DD.jsonl` — one new JSON record appended
 - Task file moved to: `./Vault/Done/<task_filename>.md`
 - Result file moved to: `./Vault/Done/RESULT_<task_filename>.md`
+- Related `FILE_*` artifact moved to: `./Vault/Archive/<artifact_filename>` (if present)
 
 ## Procedure
 
@@ -62,7 +63,11 @@
 7. **Move files** to `./Vault/Done/`:
    - Move `./Vault/Needs_Action/<task_filename>.md` → `./Vault/Done/<task_filename>.md`
    - Move `./Vault/Needs_Action/RESULT_<task_filename>.md` → `./Vault/Done/RESULT_<task_filename>.md`
-8. **Do NOT move or delete** the staged artifact (`FILE_*` files). Artifacts stay in `./Vault/Needs_Action/` unless the task explicitly requests removal.
+8. **Move the related FILE_* artifact** to `./Vault/Archive/`:
+   - Read `related_artifact` from the task frontmatter.
+   - If the artifact file exists at `./Vault/Needs_Action/<FILE_artifact>`, move it to `./Vault/Archive/<FILE_artifact>`.
+   - If the artifact is not present (already moved, or never existed), skip silently — do NOT error.
+   - **Never delete** the artifact; only move it.
 
 ## Error Handling
 - If any step fails, log an ERROR entry to `System_Logs.md`:
@@ -73,12 +78,12 @@
 - Leave the task file in `./Vault/Needs_Action/` (do not move partially processed tasks).
 
 ## Safety Constraints
-- **Must NOT** delete any files (only move task + result to Done).
-- **Must NOT** move or delete staged artifacts (FILE_* files) unless the task explicitly requires it.
+- **Must NOT** delete any files (only move task + result to Done; move artifact to Archive).
 - **Must NOT** perform external actions (email, payments, API calls).
 - **Must NOT** modify `Company_Handbook.md`.
 - **Must NOT** modify the task file itself (it is read-only; all output goes to RESULT).
 - Respect `needs_human_approval`: if `true`, do not close — log a BLOCKED entry instead and leave in queue.
+- Artifact move to Archive is best-effort: if the file is absent, skip silently.
 
 ## Success Criteria
 - [ ] Task file was read and frontmatter was parsed
@@ -87,5 +92,6 @@
 - [ ] System_Logs.md was appended with a TASK_PROCESSED entry
 - [ ] JSONL log record was written to Vault/Logs/YYYY-MM-DD.jsonl
 - [ ] Task and result files were moved to Vault/Done/
-- [ ] No staged artifacts were moved or deleted
+- [ ] FILE_* artifact was moved to Vault/Archive/ (if present)
+- [ ] No files were deleted
 - [ ] No external actions were performed

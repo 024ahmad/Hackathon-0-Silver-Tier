@@ -247,6 +247,38 @@ process tasks
 
 ---
 
+## Bronze Stabilization Enhancements
+
+The following structural improvements were added after the initial Bronze implementation to harden safety, improve hygiene, and lay groundwork for Silver tier automation. Existing behavior is fully preserved.
+
+### DRY_RUN Mode (Watcher)
+
+The watcher now reads a `DRY_RUN` environment variable (default: `true`). When enabled, the watcher detects file events and logs exactly what it would do — but writes no files to disk. This makes it safe to run in any environment without side effects during testing or CI.
+
+To enable live mode, set `DRY_RUN=false` (in `.env` or as an environment variable before starting the watcher).
+
+### Vault/Archive Folder
+
+A new `Vault/Archive/` directory receives `FILE_*` artifacts after their tasks are closed. Previously, staged artifacts accumulated in `Vault/Needs_Action/` indefinitely. Now the `close_task` skill moves them to `Archive/` as a best-effort step (skipped silently if the file is absent). No files are ever deleted.
+
+### Vault/Pending_Approval Folder
+
+A new `Vault/Pending_Approval/` directory serves as the structural foundation for the Human-in-the-Loop (HITL) workflow. Tasks with `needs_human_approval: true` in their frontmatter are intended to be routed here for human review before processing can continue. The folder and its policy are in place; automated routing is planned for Silver tier.
+
+### Orchestrator Stub (`orchestrator.py`)
+
+A minimal `orchestrator.py` script polls `Vault/Needs_Action/` every 5 seconds and reports how many pending task files exist. It does not invoke Claude or process tasks — it is a safe scaffold that confirms the polling loop works and establishes the pattern that the Silver tier orchestrator will build on.
+
+```bash
+python orchestrator.py
+```
+
+### .env.example
+
+A `.env.example` file documents all supported environment variables (`WATCH_INTERVAL_MS`, `DRY_RUN`). The real `.env` file is gitignored and must never be committed.
+
+---
+
 ## Hackathon Submission
 
 | Field | Value |
