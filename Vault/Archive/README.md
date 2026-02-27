@@ -15,14 +15,14 @@ and reference purposes.
 - Only `FILE_*` files (staged copies of Inbox originals) are moved here.
 - The task `.md` file and `RESULT_*.md` file go to `Vault/Done/` — not here.
 - Files are **moved, never deleted** — no data is lost.
-- Original files in `Vault/Inbox/` are untouched (the watcher uses copy2).
-
-## Contents Over Time
-
-Each entry here corresponds to one closed task. The file name retains the
-`FILE_` prefix to link it back to the task that processed it.
+- Original files in `Vault/Inbox/` are untouched (the watcher uses `copy2`).
 
 ## Retention
 
-No automated retention policy is implemented in Bronze. Files accumulate until
-manually reviewed or removed.
+No automated retention policy is implemented. Files accumulate until manually
+reviewed or removed by the operator.
+
+## Current Status (Silver Preparation)
+
+Folder is active. The `close_task` skill moves artifacts here as a best-effort
+step on task completion (silently skipped if the artifact is not present).

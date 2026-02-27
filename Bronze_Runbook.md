@@ -1,5 +1,12 @@
 # Bronze Runbook
 
+> **Note — Silver Preparation Structure Added**
+> Silver structural folders (`Vault/Plans/`, `Vault/Approved/`, `Vault/Rejected/`,
+> `Vault/Pending_Approval/`, `Vault/Archive/`) have been created in the Vault.
+> **Current behavior remains Bronze manual mode.** HITL folders exist but are
+> not yet active — no tasks are automatically routed to them. The Bronze
+> workflow below is fully unchanged.
+
 Step-by-step guide for processing vault tasks using Agent Skills.
 In Bronze tier, all skills are invoked manually via Claude Code prompts.
 

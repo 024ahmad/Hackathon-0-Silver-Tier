@@ -35,3 +35,12 @@ Archive/*
 
 Pending_Approval/*
 !Pending_Approval/README.md
+
+Approved/*
+!Approved/README.md
+
+Rejected/*
+!Rejected/README.md
+
+Plans/*
+!Plans/README.md
